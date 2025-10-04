@@ -24,6 +24,7 @@
   "type": "module",
   "dependencies": {
     "express": "^5.2.1",
+    "multer": "^2.0.2",
     "node-addon-api": "^8.5.0"
   },
   "devDependencies": {

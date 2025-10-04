@@ -54,13 +54,30 @@ export function deleteVideo(req, res) {
     }
 }
 
+export function uploadVideo(req, res) {
+    try {
+        if (!req.file) {
+        return res.status(400).json({ error: "파일이 업로드되지 않았습니다" });
+        }
+
+        const video = videoService.createVideo(req.file.originalname, req.file.path);
+
+        res.status(201).json({
+        message: "업로드 성공",
+        video
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 export function startTranscode(req, res) {
     try {
         const { videoId, inputPath, outputPath, format } = req.body;
 
         if (!videoId || !inputPath || !outputPath) {
             return res.status(400).json({ error: "필수 파라미터가 누락되었습니다" });
-       }
+        }
 
         const jobId = videoService.startTranscodeJob(
             Number(videoId),
