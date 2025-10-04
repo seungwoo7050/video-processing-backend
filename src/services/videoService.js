@@ -1,6 +1,6 @@
 import { Worker } from "worker_threads";
 import path from "path";
-import {fileURLToPath, fimeURLToPath} from "url";
+import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
