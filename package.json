@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "dev": "node --watch src/server.js",
+    "build": "node-gyp rebuild",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,10 @@
   "homepage": "https://github.com/seungwoo7050/video-processing-api#readme",
   "type": "module",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "node-addon-api": "^8.5.0"
+  },
+  "devDependencies": {
+    "node-gyp": "^12.1.0"
   }
 }
