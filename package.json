@@ -23,6 +23,7 @@
   "homepage": "https://github.com/seungwoo7050/video-processing-api#readme",
   "type": "module",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "multer": "^2.0.2",
     "node-addon-api": "^8.5.0"
