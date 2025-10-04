@@ -19,5 +19,8 @@
     "url": "https://github.com/seungwoo7050/video-processing-api/issues"
   },
   "homepage": "https://github.com/seungwoo7050/video-processing-api#readme",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }

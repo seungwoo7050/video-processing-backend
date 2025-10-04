@@ -1,20 +1,14 @@
-import http from "http";
+import express from 'express';
 
+const app = express();
 const PORT = 3000;
 
-const server = http.createServer((req, res) => {
-    const url = new URL(req.url, `http://${req.headers.host}`);
+app.use(express.json());
 
-    if (req.method === "GET" && url.pathname === "/health") {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ status: "ok", message: "Server is running" }));
-        return ;
-    }
-
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Not Found" }));
+app.get('/health', (req, res) => {
+    res.json({ status: 'OK', message: "서버가 실행 중입니다" });
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`서버가 http://localhost:${PORT} 에서 실행중입니다`);
 });
