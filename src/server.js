@@ -6,6 +6,14 @@ const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 app.use(express.json());
+
+const healthHandler = (req, res) => {
+  res.json({ status: "ok", message: "서버가 정상적으로 작동 중입니다!" });
+}
+
+app.get("/health", healthHandler);
+app.get("/api/health", healthHandler);
+
 app.use("/api/videos", videoRoutes);
 
 app.use((err, req, res, next) => {
