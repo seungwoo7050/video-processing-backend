@@ -64,6 +64,19 @@ const parseString = (name, { defaultValue, required = false } = {}) => {
     return rawValue;
 }
 
+const parseUrlString = (name, { defaultValue, required = false } = {}) => {
+    const rawValue = parseString(name, { defaultValue, required });
+    if (rawValue === undefined) {
+        return rawValue;
+    }
+    try {
+        new URL(rawValue);
+    } catch {
+        throw new Error(`Invalid URL for environment variable: ${name}`);
+    }
+    return rawValue;
+}
+
 export const env = {
     PORT: parseNumber("PORT", { defaultValue: 3000 }),
     NODE_ENV: parseRequired("NODE_ENV"),
@@ -71,4 +84,12 @@ export const env = {
     WORK_DIR: parseString("WORK_DIR", { required: true }),
     UPLOAD_DIR: parseString("UPLOAD_DIR", { defaultValue: "uploads" }),
     MAX_FILE_SIZE: parseNumber("MAX_FILE_SIZE", { defaultValue: 104857600 }), // 100MB
+    DATABASE_URL: parseUrlString("DATABASE_URL", { required: true }),
+    REDIS_URL: parseUrlString("REDIS_URL", { required: true }),
+    S3_ENDPOINT: parseUrlString("S3_ENDPOINT", { required: true }),
+    S3_ACCESS_KEY: parseString("S3_ACCESS_KEY", { required: true }),
+    S3_SECRET_KEY: parseString("S3_SECRET_KEY", { required: true }),
+    S3_BUCKET: parseString("S3_BUCKET", { required: true }),
+    S3_REGION: parseString("S3_REGION", { defaultValue: "us-east-1" }),
+    JWT_SECRET: parseString("JWT_SECRET", { required: true }),
 }
