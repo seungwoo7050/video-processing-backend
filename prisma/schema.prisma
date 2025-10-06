@@ -1,8 +1,96 @@
-generate client {
-    provider = "prisma-client-js"
+generator client {
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VideoStatus {
+  UPLOADED
+  ANALYZING
+  READY
+  FAILED
+}
+
+enum JobType {
+  ANALYZE
+  THUMBNAIL
+  HLS
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  CANCELED
+}
+
+enum DerivativeType {
+  THUMBNAIL
+  HLS
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  videos Video[]
+}
+
+model Video {
+  id              Int         @id @default(autoincrement())
+  ownerId         Int
+  status          VideoStatus @default(UPLOADED)
+  sourceObjectKey String
+  durationMs      Int?
+  metadata        Json?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  owner       User         @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  jobs        Job[]
+  derivatives Derivative[]
+
+  @@index([ownerId])
+  @@index([status])
+}
+
+model Job {
+  id          Int       @id @default(autoincrement())
+  videoId     Int
+  type        JobType
+  status      JobStatus @default(QUEUED)
+  progress    Int?
+  outTimeMs   Int?
+  heartbeatAt DateTime?
+  attempts    Int       @default(0)
+  queueJobId  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([videoId])
+  @@index([status])
+  @@index([type])
+}
+
+model Derivative {
+  id        Int            @id @default(autoincrement())
+  videoId   Int
+  type      DerivativeType
+  objectKey String
+  metadata  Json?
+  createdAt DateTime       @default(now())
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([videoId])
+  @@index([type])
 }
