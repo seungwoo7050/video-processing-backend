@@ -10,7 +10,6 @@
     "worker": "node src/worker.js",
     "build": "node-gyp rebuild",
     "postinstall": "npm run build",
-
     "run:addon": "node scripts/testAddon.js",
     "run:worker": "node scripts/testWorker.js",
     "run:progress": "node scripts/testProgress.js"

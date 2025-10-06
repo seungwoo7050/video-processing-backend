@@ -1,8 +1,6 @@
-import "dotenv/config";
 import app from "./app.js";
+import { env } from "./config/env.js";
 
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-
-app.listen(PORT, () => {
-  console.log(`서버가 http://localhost:${PORT} 에서 실행중입니다`);
+app.listen(env.PORT, () => {
+  console.log(`서버가 http://localhost:${env.PORT} 에서 실행중입니다`);
 });
