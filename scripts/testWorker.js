@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 console.log("메인 스레드: Worker 시작");
 
-const worker = new Worker(path.join(__dirname, "workers/simpleWorker.js"), {
+const worker = new Worker(path.join(__dirname, "../src/workers/simpleWorker.js"), {
   workerData: { iterations: 100000000 }
 });
 

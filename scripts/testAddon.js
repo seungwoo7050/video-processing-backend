@@ -9,5 +9,5 @@ const ffmpeg = require(path.join(__dirname, "../build/Release/ffmpeg_addon.node"
 
 console.log("FFmpeg 버전:", ffmpeg.getVersion());
 
-const info = ffmpeg.getVideoInfo("test.mp4");
+const info = ffmpeg.getVideoInfo(path.join(process.cwd(), "test.mp4"));
 console.log("비디오 정보:", info);

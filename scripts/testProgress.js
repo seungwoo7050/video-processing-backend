@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const worker = new Worker(path.join(__dirname, "workers/progressWorker.js"), {
+const worker = new Worker(path.join(__dirname, "../src/workers/progressWorker.js"), {
   workerData: { steps: 10000000 }
 });
 
