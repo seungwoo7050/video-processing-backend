@@ -29,12 +29,14 @@
   "homepage": "https://github.com/seungwoo7050/video-processing-api#readme",
   "type": "module",
   "dependencies": {
+    "@prisma/client": "^6.15.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "multer": "^2.0.2",
     "node-addon-api": "^8.5.0"
   },
   "devDependencies": {
-    "node-gyp": "^12.1.0"
+    "node-gyp": "^12.1.0",
+    "prisma": "^6.15.0"
   }
 }
