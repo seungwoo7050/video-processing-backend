@@ -12,7 +12,9 @@
     "postinstall": "echo skip",
     "run:addon": "node scripts/testAddon.js",
     "run:worker": "node scripts/testWorker.js",
-    "run:progress": "node scripts/testProgress.js"
+    "run:progress": "node scripts/testProgress.js",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:init": "prisma migrate dev --name init"
   },
   "repository": {
     "type": "git",
