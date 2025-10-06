@@ -2,5 +2,7 @@ node_modules
 uploads
 build
 .git
-.env
 npm-debug.log*
+yarn-error.log*
+.DS_Store
+.env

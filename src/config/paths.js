@@ -3,6 +3,9 @@ import path from "node:path";
 import { env } from "./env.js";
 
 const resolveDir = (dir) => {
+    if (typeof dir !== "string" || dir.length === 0) {
+        throw new Error(`Invalid dir value: ${dir}`);
+    }
     if (path.isAbsolute(dir)) {
         return dir;
     }
@@ -10,7 +13,7 @@ const resolveDir = (dir) => {
 }
 
 export const paths = {
-    tmp: resolveDir(env.TEMP_DIR),
+    tmp: resolveDir(env.TMP_DIR),
     work: resolveDir(env.WORK_DIR),
 }
 
