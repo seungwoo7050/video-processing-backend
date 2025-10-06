@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
+    "worker": "node src/worker.js",
     "build": "node-gyp rebuild",
     "postinstall": "npm run build",
 
