@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 const healthHandler = (req, res) => {
-  res.json({ status: "ok", message: "서버가 정상적으로 작동 중입니다" });
+  res.json({ status: "ok", role: "api", uptimesec: Math.floor(process.uptime()) });
 }
 
 app.get("/health", healthHandler);

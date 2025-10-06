@@ -1,6 +1,6 @@
 import app from "./app.js";
 import { env } from "./config/env.js";
-import { ensurePaths } from "./config/path.js";
+import { ensurePaths } from "./config/paths.js";
 
 ensurePaths();
 
