@@ -1,5 +1,6 @@
 import express from "express";
 import videoRoutes from "./routes/videoRoutes.js";
+import authRoutes from "./routes/v1/authRoutes.js";
 import { pingDatabase } from "./db/prisma.js";
 import { pingRedis } from "./db/redis.js";
 import { env } from "./config/env.js";
@@ -43,6 +44,7 @@ app.get("/health", healthHandler);
 app.get("/api/health", healthHandler);
 
 app.use("/api/videos", videoRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
