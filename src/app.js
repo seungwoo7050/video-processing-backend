@@ -1,12 +1,42 @@
 import express from "express";
 import videoRoutes from "./routes/videoRoutes.js";
+import { pingDatabase } from "./db/prisma.js";
+import { pingRedis } from "./db/redis.js";
+import { env } from "./config/env.js";
+
+const isDev = env.NODE_ENV === "development";
 
 const app = express();
 
 app.use(express.json());
 
-const healthHandler = (req, res) => {
-  res.json({ status: "ok", role: "api", uptimesec: Math.floor(process.uptime()) });
+const resolveStatus = async (promiseFactory) => {
+  try {
+    await promiseFactory();
+    return "ok";
+  } catch (e) {
+    console.error("[health]", e);
+    return "fail";
+  }
+}
+
+const healthHandler = async (req, res) => {
+  const timeoutMsDb = 2000;
+  const timeoutMsRedis = 500;
+  const [db, redis] = await Promise.all([
+    resolveStatus(() => pingDatabase(timeoutMsDb)),
+    resolveStatus(() => pingRedis(timeoutMsRedis)),
+  ]);
+
+  const ok = db === "ok" && redis === "ok";
+
+  res.status(ok ? 200 : 503).json({
+    status: ok ? "ok" : "degraded",
+    role: "api",
+    uptimeSec: Math.floor(process.uptime()),
+    db,
+    redis,
+  });
 }
 
 app.get("/health", healthHandler);
