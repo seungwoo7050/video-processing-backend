@@ -77,6 +77,24 @@ const parseUrlString = (name, { defaultValue, required = false } = {}) => {
     return rawValue;
 }
 
+const parseSecret = (name, { required = false, minLength = 32, forbid = ["changeme", "secret", "dev-secret"]}) => {
+  const value = parseString(name, { required });
+
+  if (value === undefined) {
+    return value;
+  }
+
+  if (value.length < minLength) {
+    throw new Error(`Invalid secret for environment variable: ${name} must be at least ${minLength}`);
+  }
+  
+  if (forbid.includes(value.toLowerCase())) {
+    throw new Error(`Invalid secret for environment variable: ${name} is too weak`);
+  }
+
+  return value;
+}
+
 export const env = {
     PORT: parseNumber("PORT", { defaultValue: 3000 }),
     NODE_ENV: parseRequired("NODE_ENV"),
@@ -91,5 +109,6 @@ export const env = {
     S3_SECRET_KEY: parseString("S3_SECRET_KEY", { required: true }),
     S3_BUCKET: parseString("S3_BUCKET", { required: true }),
     S3_REGION: parseString("S3_REGION", { defaultValue: "us-east-1" }),
-    JWT_SECRET: parseString("JWT_SECRET", { required: true }),
+    JWT_SECRET: parseSecret("JWT_SECRET", { required: true, minLength: 32 }),
+    JWT_EXPIRES_IN: parseString("JWT_EXPIRES_IN", { required: true }),
 }

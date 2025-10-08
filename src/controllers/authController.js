@@ -29,3 +29,28 @@ export async function register(req, res, next) {
     return next(error);
   }
 }
+
+export async function login(req, res, next) {
+  try {
+    let { email, password } = req.body ?? {};
+
+    if (typeof email !== "string" || typeof password !== "string") {
+      return res.status(400).json({ code: "VALIDATION_ERROR", message: "이메일과 비밀번호는 필수입니다" });
+    }
+
+    email = email.trim().toLowerCase();
+    password = password.trim();
+
+    if (!email || !password) {
+      return res.status(400).json({ code: "VALIDATION_ERROR", message: "이메일과 비밀번호는 필수입니다" });
+    }
+
+    const { accessToken } = await authService.loginUser(email, password);
+    return res.status(200).json({ accessToken });
+  } catch (error) {
+    if (error.code === "INVALID_CREDENTIALS") {
+      return res.status(401).json({ code: "INVALID_CREDENTIALS", message: "이메일 또는 비밀번호가 올바르지 않습니다" });
+    }
+    return next(error);
+  }
+}
