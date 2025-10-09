@@ -1,22 +1,22 @@
 import * as videoService from '../services/videoService.js';
 
-export function getAllVideos(req, res) {
+export async function getAllVideos(req, res) {
   try {
-    const videos = videoService.getVideosByOwner(req.user.id);
-    res.json(videos);
+    const videos = await videoService.getVideosByOwnerDb(req.user.id);
+    return res.json(videos);
   } catch (error) {
-    res.status(error.status || 500).json({ error: error.message });
+    return res.status(error.status || 500).json({ error: error.message });
   }
 }
 
-export function getVideoById(req, res) {
+export async function getVideoById(req, res) {
   try {
     const id = parseInt(req.params.id, 10);
-    const video = videoService.getVideoById(id, req.user.id);
+    const video = await videoService.getVideoByIdDb(id, req.user.id);
 
-    res.json(video);
+    return res.json(video);
   } catch (error) {
-    res.status(error.status || 500).json({ error: error.message });
+    return res.status(error.status || 500).json({ error: error.message });
   }
 }
 
@@ -35,14 +35,14 @@ export function createVideo(req, res) {
   }
 }
 
-export function deleteVideo(req, res) {
+export async function deleteVideo(req, res) {
   try {
     const id = parseInt(req.params.id, 10);
-    videoService.deleteVideo(id, req.user.id);
+    await videoService.deleteVideoDb(id, req.user.id);
     
-    res.status(204).end();
+    return res.status(204).end();
   } catch (error) {
-    res.status(error.status || 500).json({ error: error.message });
+    return res.status(error.status || 500).json({ error: error.message });
   }
 }
 

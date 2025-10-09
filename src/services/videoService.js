@@ -1,6 +1,7 @@
 import { Worker } from "worker_threads";
 import path from "path";
 import { fileURLToPath } from "url";
+import prisma from "../db/prisma.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -15,6 +16,14 @@ class HttpError extends Error {
   }
 }
 
+function toIntId(value, name = "id") {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n <= 0) {
+    throw new HttpError(400, `유효하지 않은 ${name}입니다`);
+  }
+  return n;
+}
+
 function ownerKey(ownerId) {
   return String(ownerId);
 }
@@ -27,6 +36,33 @@ function ensureOwned(resourceOwnerId, requesterOwnerId) {
 
 function findVideoById(id) {
   return videos.find((video) => video.id === id);
+}
+
+export async function getVideosByOwnerDb(ownerId) {
+  const ownerIdNum = toIntId(ownerId, "ownerId");
+  return prisma.video.findMany({
+    where: { ownerId: ownerIdNum },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function getVideoByIdDb(id, ownerId) {
+  const videoId = toIntId(id, "id");
+  const video = await prisma.video.findUnique({
+    where: { id: videoId },
+  });
+
+  if (!video) {
+    throw new HttpError(404, "비디오를 찾을 수 없습니다");
+  }
+
+  ensureOwned(video.ownerId, ownerId);
+  return video;
+}
+
+export async function deleteVideoDb(id, ownerId) {
+  const video = await getVideoByIdDb(id, ownerId);
+  await prisma.video.delete({ where: { id: video.id } });
 }
 
 export function getVideosByOwner(ownerId) {
