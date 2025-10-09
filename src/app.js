@@ -1,9 +1,10 @@
 import express from "express";
-import videoRoutes from "./routes/videoRoutes.js";
+import videoRoutes from "./routes/v1/videoRoutes.js";
 import authRoutes from "./routes/v1/authRoutes.js";
 import { pingDatabase } from "./db/prisma.js";
 import { pingRedis } from "./db/redis.js";
 import { env } from "./config/env.js";
+import authenticate from "./middlewares/authenticate.js";
 
 const isDev = env.NODE_ENV === "development";
 
@@ -43,8 +44,8 @@ const healthHandler = async (req, res) => {
 app.get("/health", healthHandler);
 app.get("/api/health", healthHandler);
 
-app.use("/api/videos", videoRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/videos", authenticate, videoRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
