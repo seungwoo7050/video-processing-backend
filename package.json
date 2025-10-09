@@ -13,6 +13,7 @@
     "run:addon": "node scripts/testAddon.js",
     "run:worker": "node scripts/testWorker.js",
     "run:progress": "node scripts/testProgress.js",
+    "run:storage": "node scripts/testStorage.js",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:init": "prisma migrate dev --name init"
   },
@@ -29,6 +30,8 @@
   "homepage": "https://github.com/seungwoo7050/video-processing-api#readme",
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.957.0",
+    "@aws-sdk/lib-storage": "^3.957.0",
     "@prisma/client": "^6.15.0",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
